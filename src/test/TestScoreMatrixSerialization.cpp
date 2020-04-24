@@ -19,8 +19,12 @@ int main (int, const char**) {
 
     ScoreMatrix unserialized = ScoreMatrix::unserialize(serialized, subMat.alphabetSize, 2);
     Debug(Debug::INFO) << unserialized.elementSize << " " << unserialized.rowSize  << " "
-                       << unserialized.score[0]    << " " << unserialized.index[0] << "\n";
+                       << unserialized.score[0]    << "\n";
     free(serialized);
+
+    free(extMattwo);
+    // Why not use an operator. Will free & destruct & will not SIGSEGV
+    delete(unserialized);
 
     return EXIT_SUCCESS;
 }

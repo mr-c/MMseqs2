@@ -125,9 +125,11 @@ int main (int, const char**) {
                         "GCTATTATATCGCTCTCTTTAACCCATTCTGTTTTATCGATTCTAATCCTGAAGACGCCT"
                         "CGCATTTTTATGGCGTAATTTTTTAATGATTTAATTATTTAACTTTAATTTATCTCTTCA";
 
-    writer.writeData((char*)data,strlen(data), 1,0);
+    writer.writeData((char*)data,strlen(data), 1, 0);
     writer.close();
-    DBReader<unsigned int> reader("dataLinear", "dataLinear.index", 1, 0);
+    std::cout << "Before reader" << "\n";
+    DBReader<unsigned int> reader("dataLinear", "dataLinear.index", 1, 1);
+    std::cout << "After reader" << "\n";
     reader.open(0);
     reader.readMmapedDataInMemory();
     reader.printMagicNumber();

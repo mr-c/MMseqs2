@@ -83,7 +83,7 @@ int main (int, const char**) {
     int gap_extend = 1;
     int mode = 0;
     size_t cells = 0;
-    std::vector<std::string> sequences = readData("/Users/mad/Documents/databases/rfam/Rfam.fasta");
+    std::vector<std::string> sequences = readData("../example-data/DB.fasta");
     for(size_t seq_i = 0; seq_i < sequences.size(); seq_i++){
         query->mapSequence(1,1,sequences[seq_i].c_str(), sequences[seq_i].size());
         aligner.ssw_init(query, tinySubMat, &subMat, subMat.alphabetSize, 2);

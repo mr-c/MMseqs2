@@ -58,7 +58,7 @@ int main (int, const char**) {
     /////////                                 |   ////////////////
     ///////// Choose substitution matrix here V ! ////////////////
     //SubstitutionMatrix subMat("/Users/soeding/Projects/MMseqs2/MMseqs2/data/blosum100.out", 2.0, -0.0f);
-    SubstitutionMatrix subMat("/Users/soeding/Projects/MMseqs2/MMseqs2/data/PAM70.out", 2.0, -0.0f);
+    SubstitutionMatrix subMat("../example-data/PAM70.out", 2.0, -0.0f);
 
     const size_t numAAs = subMat.alphabetSize-1;    // size of original alphabet
     const size_t numKmers = pow(numAAs,kmerSize);
@@ -72,8 +72,8 @@ int main (int, const char**) {
     //////////////////////////////////////////////////////////////////////////////////////////////
     // Compute probabilities for all 20^k k-mers in a sequence database "seqDB"
 
-    std::string dbPath = "seqDB";
-    std::string dbIndexPath = "seqDB.index";
+    std::string dbPath = "../example-data/DB";
+    std::string dbIndexPath = "../example-data/DB.index";
     DBReader<unsigned int> seqDb(dbPath.c_str(), dbIndexPath.c_str(), 1, DBReader<unsigned int>::USE_DATA|DBReader<unsigned int>::USE_INDEX);
     seqDb.open(DBReader<unsigned int>::NOSORT);
 

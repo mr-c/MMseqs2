@@ -17,11 +17,7 @@ int main (int, const char**) {
     Parameters &par = Parameters::getInstance();
     SubstitutionMatrix subMat(par.scoringMatrixFile.aminoacids, 8.0, -0.2f);
     DBReader<unsigned int> dbr(
-                               "/Users/mad/Documents/databases/db_small/db_small",
-//                               "/Users/mad/Documents/databases/mmseqs_benchmark/benchmarks/protein_search_uniscop/db/mmseqs/db_sw",
-                               "/Users/mad/Documents/databases/db_small/db_small.index"
-//                               "/Users/mad/Documents/databases/mmseqs_benchmark/benchmarks/protein_search_uniscop/db/mmseqs/db_sw.index"
-                               , 1, 0);
+                               "../example-data/DB", "../example-data/DB.index", 1, 1);
     dbr.open(DBReader<unsigned int>::LINEAR_ACCCESS);
 
     Sequence *s = new Sequence(32000, Parameters::DBTYPE_AMINO_ACIDS, &subMat, 6, true, false);
