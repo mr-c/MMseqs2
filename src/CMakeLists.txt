@@ -150,7 +150,7 @@ else ()
     endif (HAVE_AVX2_EXTENSIONS)
 endif ()
 
-target_link_libraries(mmseqs-framework tinyexpr libzstd_static microtar)
+target_link_libraries(mmseqs-framework tinyexpr zstd microtar)
 if (CYGWIN)
     target_link_libraries(mmseqs-framework nedmalloc)
 endif ()
