@@ -4,10 +4,6 @@
 #include "DistanceCalculator.h"
 #include "Timer.h"
 
-#ifndef NEON
-#include <CpuInfo.h>
-#endif
-
 #include <iomanip>
 
 extern const char *binary_name;
@@ -24,30 +20,6 @@ extern std::vector<Command> baseCommands;
 extern std::vector<Categories> categories;
 
 void checkCpu() {
-#ifndef NEON
-    CpuInfo info;
-    if (info.HW_x64 == false) {
-        Debug(Debug::ERROR) << "64-bit system is required to run MMseqs2.\n";
-        EXIT(EXIT_FAILURE);
-    }
-#ifdef SEE
-    if(info.HW_SSE41 == false) {
-        Debug(Debug::ERROR) << "SSE4.1 is required to run MMseqs2.\n";
-        EXIT(EXIT_FAILURE);
-    }
-#endif
-#ifdef AVX2
-    if (info.HW_AVX2 == false) {
-        Debug(Debug::ERROR) << "Your machine does not support AVX2.\n";
-        if (info.HW_SSE41 == true) {
-            Debug(Debug::ERROR) << "Please recompile with SSE4.1: cmake -DHAVE_SSE4_1=1 \n";
-        } else {
-            Debug(Debug::ERROR) << "SSE4.1 is the minimum requirement to run MMseqs2.\n";
-        }
-        EXIT(EXIT_FAILURE);
-    }
-#endif
-#endif
 }
 
 Command *getCommandByName(const char *s) {

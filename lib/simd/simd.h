@@ -50,11 +50,8 @@
 #define SSE
 #endif
 
-#ifdef NEON
-#include "sse2neon.h"
-#else
-#include <xmmintrin.h>
-#endif
+#define SIMDE_ENABLE_NATIVE_ALIASES
+#include <simde/x86/sse.h>
 
 #ifdef AVX512
 #include <zmmintrin.h.h> // AVX512
@@ -284,11 +281,9 @@ typedef __m256 simd_float;
 #endif //AVX_SUPPORT
 
 
-#ifdef SSE
+#include <simde/x86/sse4.1.h>
 uint16_t simd_hmax16(const __m128i buffer);
 uint8_t simd_hmax8(const __m128i buffer);
-#ifndef NEON
-#include <smmintrin.h>  //SSE4.1
 // double support
 #ifndef SIMD_DOUBLE
 #define SIMD_DOUBLE
@@ -311,7 +306,6 @@ typedef __m128d simd_double;
 #define simdf64_andnot(x,y) _mm_andnot_pd(x,y)
 #define simdf64_xor(x,y)    _mm_xor_pd(x,y)
 #endif //SIMD_DOUBLE
-#endif
 
 // float support
 #ifndef SIMD_FLOAT
@@ -395,7 +389,6 @@ typedef __m128i simd_int;
 #define simdi32_i2f(x) 	    _mm_cvtepi32_ps(x)  // convert integer to s.p. float
 #define simdi_i2fcast(x)    _mm_castsi128_ps(x)
 #endif //SIMD_INT
-#endif //SSE
 
 #ifdef NEON
 inline uint16_t simd_hmax16(const __m128i buffer) {
@@ -488,7 +481,6 @@ inline unsigned short extract_epi16(__m256i v, int pos) {
     return 0;
 }
 #else
-#ifdef SSE
 inline unsigned short extract_epi16(__m128i v, int pos) {
     switch(pos){
         case 0: return _mm_extract_epi16(v, 0);
@@ -502,7 +494,6 @@ inline unsigned short extract_epi16(__m128i v, int pos) {
     }
     return 0;
 }
-#endif
 #endif
 
 
@@ -608,7 +599,6 @@ inline float ScalarProd20(const float* qi, const float* tj) {
 //
 //
 //TODO fix this
-#ifdef SSE
     float __attribute__((aligned(16))) res;
     __m128 P; // query 128bit SSE2 register holding 4 floats
     __m128 R;// result
@@ -637,7 +627,6 @@ inline float ScalarProd20(const float* qi, const float* tj) {
     R = _mm_add_ps(R,P);
     _mm_store_ss(&res, R);
     return res;
-#endif
 //#endif
     return tj[0] * qi[0] + tj[1] * qi[1] + tj[2] * qi[2] + tj[3] * qi[3]
             + tj[4] * qi[4] + tj[5] * qi[5] + tj[6] * qi[6] + tj[7] * qi[7]

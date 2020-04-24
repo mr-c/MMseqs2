@@ -71,12 +71,8 @@ simd_int UngappedAlignment::vectorDiagonalScoring(const char *profile,
     simd_int vscore        = simdi_setzero();
     simd_int vMaxScore     = simdi_setzero();
     const simd_int vBias   = simdi8_set(bias);
-#ifndef AVX2
-    #ifdef SSE
     const simd_int sixten  = simdi8_set(16);
     const simd_int fiveten = simdi8_set(15);
-#endif
-#endif
     for(unsigned int pos = 0; pos < seqLen; pos++){
         simd_int template01 = simdi_load((simd_int *)&dbSeq[pos*VECSIZE_INT*4]);
 #ifdef AVX2
@@ -85,7 +81,7 @@ simd_int UngappedAlignment::vectorDiagonalScoring(const char *profile,
         //        __m256i score_vec_8bit = _mm256_shuffle_epi8(score_matrix_vec01, template01);
         //        __m256i lookup_mask01  = _mm256_cmpgt_epi8(sixten, template01); // 16 > t
         //        score_vec_8bit = _mm256_and_si256(score_vec_8bit, lookup_mask01);
-#elif defined(SSE)
+#else
         // each position has 32 byte
         // 20 scores and 12 zeros
         // load score 0 - 15
@@ -96,16 +92,8 @@ simd_int UngappedAlignment::vectorDiagonalScoring(const char *profile,
         // _mm_shuffle_epi8
         // for i ... 16
         //   score01[i] = score_matrix_vec01[template01[i]%16]
-#ifdef NEON
-        __m128i score01 =vreinterpretq_m128i_u8(vqtbl1q_u8(vreinterpretq_u8_m128i(score_matrix_vec01),vreinterpretq_u8_m128i(template01)));
-#else
         __m128i score01 =_mm_shuffle_epi8(score_matrix_vec01,template01);
-#endif
-#ifdef NEON
-        __m128i score16 =vreinterpretq_m128i_u8(vqtbl1q_u8(vreinterpretq_u8_m128i(score_matrix_vec16),vreinterpretq_u8_m128i(template01)));
-#else
         __m128i score16 =_mm_shuffle_epi8(score_matrix_vec16,template01);
-#endif
         // t[i] < 16 => 0 - 15
         // example: template01: 02 15 12 18 < 16 16 16 16 => FF FF FF 00
         __m128i lookup_mask01 = _mm_cmplt_epi8(template01, sixten);
@@ -292,7 +280,7 @@ void UngappedAlignment::extractScores(unsigned int *score_arr, simd_int score) {
     EXTRACT_AVX(24);  EXTRACT_AVX(25);  EXTRACT_AVX(26);  EXTRACT_AVX(27);
     EXTRACT_AVX(28);  EXTRACT_AVX(29);  EXTRACT_AVX(30);  EXTRACT_AVX(31);
 #undef EXTRACT_AVX
-#elif defined(SSE)
+#else
     #define EXTRACT_SSE(i) score_arr[i] = _mm_extract_epi8(score, i)
     EXTRACT_SSE(0);  EXTRACT_SSE(1);   EXTRACT_SSE(2);  EXTRACT_SSE(3);
     EXTRACT_SSE(4);  EXTRACT_SSE(5);   EXTRACT_SSE(6);  EXTRACT_SSE(7);

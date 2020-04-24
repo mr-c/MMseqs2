@@ -8,6 +8,7 @@ set(FRAMEWORK_ONLY 0 CACHE BOOL "Framework Mode")
 set(HAVE_SANITIZER 0 CACHE BOOL "Have Sanitizers")
 set(INSTALL_UTIL 1 CACHE BOOL "Install util scripts")
 set(VERSION_OVERRIDE "" CACHE STRING "Override version string in help and usage messages")
+set(EXE_SUFFIX "" CACHE STRING "Suffix to add to executable names")
 
 #Sanitizers
 if (${HAVE_SANITIZER})
@@ -40,9 +41,6 @@ endif ()
 
 # set flags
 set(MMSEQS_CXX_FLAGS "-std=c++0x")
-if (NOT ${HAVE_NEON})
-    set(MMSEQS_CXX_FLAGS "${MMSEQS_CXX_FLAGS} -m64")
-endif ()
 
 # Compiler-specific features
 if (CMAKE_COMPILER_IS_CLANG)

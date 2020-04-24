@@ -25,7 +25,8 @@ THE SOFTWARE.
 #ifdef NEON
 #include "sse2neon.h"
 #else
-#include <emmintrin.h>
+#define SIMDE_ENABLE_NATIVE_ALIASES
+#include <simde/x86/sse2.h>
 #endif
 
 #include <stdint.h>
