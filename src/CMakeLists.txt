@@ -155,6 +155,9 @@ if (CYGWIN)
     target_link_libraries(mmseqs-framework nedmalloc)
 endif ()
 
+# System-wide gzstream
+target_link_libraries(mmseqs-framework gzstream)
+
 find_package(ZLIB QUIET)
 if (ZLIB_FOUND)
     message("-- Found ZLIB")
